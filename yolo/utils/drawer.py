@@ -43,6 +43,7 @@ def draw_bboxes(img: Union[Image.Image, torch.Tensor], bboxes: List[List[Union[i
 
 
 def draw_model(*, model_cfg=None, model=None, v7_base=False):
+
     from graphviz import Digraph
 
     if model_cfg:
@@ -91,6 +92,9 @@ def draw_model(*, model_cfg=None, model=None, v7_base=False):
         for jdx in range(idx, model_size):
             if model_mat[idx, jdx]:
                 dot.edge(str(idx), str(jdx))
-
-    dot.render("Model-arch", format="png", cleanup=True)
+    try:
+        dot.render("Model-arch", format="png", cleanup=True)
+    except:
+        logger.info("Warning: Fail to find graphviz backend, skip drawing")
+        return
     logger.info("🎨 Drawing Model Architecture at Model-arch.png")
